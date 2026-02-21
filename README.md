@@ -32,10 +32,10 @@ Color-coded: green when you're comfortable, orange when usage climbs, red when a
 
 ## Quick Install
 
-### Download the binary
+### Download
 
-1. Go to [**Releases**](../../releases/latest) and download `TokenEater.zip`
-2. Unzip and move `TokenEater.app` to `/Applications`
+1. Go to [**Releases**](../../releases/latest) and download `TokenEater.dmg`
+2. Open the DMG, drag `TokenEater.app` into `Applications`
 3. First launch: **right-click > Open** (required once — the app is not notarized)
 4. Or run in terminal: `xattr -cr /Applications/TokenEater.app && open /Applications/TokenEater.app`
 
