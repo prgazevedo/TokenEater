@@ -41,14 +41,23 @@ Color-coded: green when you're comfortable, orange when usage climbs, red when a
 
 ### Configure
 
+**Auto-import (recommended):**
+
+1. Open TokenEater, click **Importer depuis le navigateur**
+2. Select your Chromium browser (Chrome, Arc, Brave, Edge)
+3. Authorize Keychain access when prompted — done!
+
+**Manual setup:**
+
 1. Open **claude.ai** in your browser and log in
 2. Open DevTools (`Cmd + Option + I`) > **Application** > **Cookies** > **claude.ai**
 3. Copy the **sessionKey** cookie (`sk-ant-sid01-...`)
 4. Copy the **lastActiveOrg** cookie (this is your Organization ID)
 5. Paste both values in the TokenEater settings window
-6. Add the widget: **right-click on desktop > Edit Widgets > search "TokenEater"**
 
-> Cookies expire roughly every month. If the widget shows an error, update them in the app.
+Then: **right-click on desktop > Edit Widgets > search "TokenEater"**
+
+> Cookies expire roughly every month. If the widget shows an error, re-import or update them manually.
 
 ## Build from source
 
@@ -84,10 +93,24 @@ killall NotificationCenter 2>/dev/null
 open "/Applications/TokenEater.app"
 ```
 
+## Supported Browsers
+
+Auto-import works with any Chromium-based browser:
+
+| Browser | Status |
+|---------|--------|
+| Google Chrome | ✓ |
+| Arc | ✓ |
+| Brave | ✓ |
+| Microsoft Edge | ✓ |
+| Chromium | ✓ |
+
+Supports both legacy and modern (v130+) Chrome cookie encryption formats.
+
 ## Architecture
 
 ```
-ClaudeUsageApp/          App host (settings UI, hidden from Dock)
+ClaudeUsageApp/          App host (settings UI, cookie import, hidden from Dock)
 ClaudeUsageWidget/       Widget Extension (WidgetKit, 15-min refresh)
 Shared/                  Shared code (API client, models, extensions)
 project.yml              XcodeGen configuration
