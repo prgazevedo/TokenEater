@@ -39,7 +39,7 @@ xcodebuild \
     build 2>&1 | tail -20
 
 # 5. Find the built app
-APP_PATH=$(find build -name "Claude Usage.app" -type d | head -1)
+APP_PATH=$(find build -name "TokenEater.app" -type d | head -1)
 
 if [ -n "$APP_PATH" ]; then
     echo ""
@@ -48,7 +48,7 @@ if [ -n "$APP_PATH" ]; then
     echo ""
     echo "Pour installer:"
     echo "  cp -R \"$APP_PATH\" /Applications/"
-    echo "  open \"/Applications/Claude Usage.app\""
+    echo "  open \"/Applications/TokenEater.app\""
 else
     echo -e "${RED}Build echoue. Verifie les erreurs ci-dessus.${NC}"
     exit 1

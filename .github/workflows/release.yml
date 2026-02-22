@@ -1,0 +1,79 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: macos-15
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: |
+          xcodegen generate
+          plutil -insert NSExtension \
+            -json '{"NSExtensionPointIdentifier":"com.apple.widgetkit-extension"}' \
+            ClaudeUsageWidget/Info.plist 2>/dev/null || true
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project ClaudeUsageWidget.xcodeproj \
+            -scheme ClaudeUsageApp \
+            -configuration Release \
+            -derivedDataPath build \
+            build
+
+      - name: Create DMG
+        run: |
+          mkdir -p dmg-staging
+          cp -R "build/Build/Products/Release/TokenEater.app" dmg-staging/
+          ln -s /Applications dmg-staging/Applications
+          hdiutil create -volname "TokenEater" \
+            -srcfolder dmg-staging \
+            -ov -format UDZO \
+            TokenEater.dmg
+
+      - name: Extract version
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Compute SHA256
+        id: sha
+        run: echo "sha256=$(shasum -a 256 TokenEater.dmg | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "$GITHUB_REF_NAME" TokenEater.dmg \
+            --title "TokenEater ${{ steps.version.outputs.version }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Homebrew Cask
+        env:
+          TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+          NEW_SHA: ${{ steps.sha.outputs.sha256 }}
+        run: |
+          git clone "https://x-access-token:${TAP_TOKEN}@github.com/AThevon/homebrew-tokeneater.git" /tmp/tap
+          cd /tmp/tap
+
+          sed -i "s/version \".*\"/version \"${NEW_VERSION}\"/" Casks/tokeneater.rb
+          sed -i "s/sha256 \".*\"/sha256 \"${NEW_SHA}\"/" Casks/tokeneater.rb
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Casks/tokeneater.rb
+          git commit -m "bump: tokeneater ${NEW_VERSION}"
+          git push

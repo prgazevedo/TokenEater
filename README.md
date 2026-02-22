@@ -67,7 +67,16 @@ Fully localized in **English** and **French**. The app automatically follows you
 
 ## Quick Install
 
-### Download
+### Homebrew (recommended)
+
+```bash
+brew tap AThevon/tokeneater
+brew install --cask tokeneater
+```
+
+To update later: `brew upgrade tokeneater`
+
+### Manual Download
 
 1. Go to [**Releases**](../../releases/latest) and download `TokenEater.dmg`
 2. Open the DMG, drag `TokenEater.app` into `Applications`
