@@ -166,13 +166,7 @@ struct UsageWidgetView: View {
                         return d > 0 ? "\(d)j \(h)h" : "\(h)h"
                     }(),
                     utilization: pacing.actualUsage,
-                    colorOverride: {
-                        switch pacing.zone {
-                        case .chill: return Color(hex: "#22C55E")
-                        case .onTrack: return Color(hex: "#0A84FF")
-                        case .hot: return Color(hex: "#EF4444")
-                        }
-                    }(),
+                    colorOverride: .customUserColor,
                     displayText: "\(pacing.delta >= 0 ? "+" : "")\(Int(pacing.delta))%"
                 )
             }
@@ -270,22 +264,8 @@ struct CircularUsageView: View {
     let utilization: Double
 
     private var ringGradient: LinearGradient {
-        if utilization >= 85 {
-            return LinearGradient(
-                colors: [Color(hex: "#EF4444"), Color(hex: "#DC2626")],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        } else if utilization >= 60 {
-            return LinearGradient(
-                colors: [Color(hex: "#F97316"), Color(hex: "#FB923C")],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        } else {
-            return LinearGradient(
-                colors: [Color(hex: "#22C55E"), Color(hex: "#4ADE80")],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-        }
+        let c = Color.customUserColor
+        return LinearGradient(colors: [c, c.opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 
     var body: some View {
@@ -326,22 +306,12 @@ struct CircularPacingView: View {
     let pacing: PacingResult
 
     private var ringColor: Color {
-        switch pacing.zone {
-        case .chill: return Color(hex: "#22C55E")
-        case .onTrack: return Color(hex: "#0A84FF")
-        case .hot: return Color(hex: "#EF4444")
-        }
+        .customUserColor
     }
 
     private var ringGradient: LinearGradient {
-        switch pacing.zone {
-        case .chill:
-            return LinearGradient(colors: [Color(hex: "#22C55E"), Color(hex: "#4ADE80")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .onTrack:
-            return LinearGradient(colors: [Color(hex: "#0A84FF"), Color(hex: "#409CFF")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .hot:
-            return LinearGradient(colors: [Color(hex: "#EF4444"), Color(hex: "#DC2626")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
+        let c = Color.customUserColor
+        return LinearGradient(colors: [c, c.opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 
     var body: some View {
@@ -397,36 +367,12 @@ struct LargeUsageBarView: View {
     var displayText: String? = nil
 
     private var barGradient: LinearGradient {
-        if let color = colorOverride {
-            return LinearGradient(colors: [color, color.opacity(0.8)], startPoint: .leading, endPoint: .trailing)
-        }
-        if utilization >= 85 {
-            return LinearGradient(
-                colors: [Color(hex: "#EF4444"), Color(hex: "#DC2626")],
-                startPoint: .leading, endPoint: .trailing
-            )
-        } else if utilization >= 60 {
-            return LinearGradient(
-                colors: [Color(hex: "#F97316"), Color(hex: "#FB923C")],
-                startPoint: .leading, endPoint: .trailing
-            )
-        } else {
-            return LinearGradient(
-                colors: [Color(hex: "#22C55E"), Color(hex: "#4ADE80")],
-                startPoint: .leading, endPoint: .trailing
-            )
-        }
+        let c = colorOverride ?? Color.customUserColor
+        return LinearGradient(colors: [c, c.opacity(0.8)], startPoint: .leading, endPoint: .trailing)
     }
 
     private var accentColor: Color {
-        if let color = colorOverride { return color }
-        if utilization >= 85 {
-            return Color(hex: "#EF4444")
-        } else if utilization >= 60 {
-            return Color(hex: "#F97316")
-        } else {
-            return Color(hex: "#22C55E")
-        }
+        colorOverride ?? .customUserColor
     }
 
     var body: some View {

@@ -88,22 +88,12 @@ struct PacingWidgetView: View {
     }
 
     private func colorForZone(_ zone: PacingZone) -> Color {
-        switch zone {
-        case .chill: return Color(hex: "#32D74B")
-        case .onTrack: return Color(hex: "#0A84FF")
-        case .hot: return Color(hex: "#FF453A")
-        }
+        .customUserColor
     }
 
     private func gradientForZone(_ zone: PacingZone) -> LinearGradient {
-        switch zone {
-        case .chill:
-            return LinearGradient(colors: [Color(hex: "#22C55E"), Color(hex: "#4ADE80")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .onTrack:
-            return LinearGradient(colors: [Color(hex: "#0A84FF"), Color(hex: "#409CFF")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .hot:
-            return LinearGradient(colors: [Color(hex: "#EF4444"), Color(hex: "#DC2626")], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
+        let c = Color.customUserColor
+        return LinearGradient(colors: [c, c.opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 
     private func formatResetDate(_ date: Date) -> String {

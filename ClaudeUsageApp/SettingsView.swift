@@ -25,6 +25,7 @@ struct SettingsView: View {
     @AppStorage("showMenuBar") private var showMenuBar = true
 
     @AppStorage("pacingDisplayMode") private var pacingDisplayMode = "dotDelta"
+    @State private var customColor: Color = .customUserColor
 
     @State private var pinnedFiveHour = true
     @State private var pinnedSevenDay = true
@@ -226,6 +227,13 @@ struct SettingsView: View {
             } footer: {
                 Text("settings.metrics.pinned.footer")
                     .fixedSize(horizontal: false, vertical: true)
+            }
+            Section("Accent Color") {
+                ColorPicker("Color for all metrics", selection: $customColor, supportsOpacity: false)
+                    .onChange(of: customColor) { newValue in
+                        UserDefaults.standard.set(newValue.hexString, forKey: "customColor")
+                        NotificationCenter.default.post(name: .displaySettingsDidChange, object: nil)
+                    }
             }
             Section("settings.pacing.display") {
                 Picker("Mode", selection: $pacingDisplayMode) {
