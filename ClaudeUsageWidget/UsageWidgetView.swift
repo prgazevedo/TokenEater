@@ -172,7 +172,8 @@ struct UsageWidgetView: View {
                         case .onTrack: return Color(hex: "#0A84FF")
                         case .hot: return Color(hex: "#EF4444")
                         }
-                    }()
+                    }(),
+                    displayText: "\(pacing.delta >= 0 ? "+" : "")\(Int(pacing.delta))%"
                 )
             }
 
@@ -393,6 +394,7 @@ struct LargeUsageBarView: View {
     let resetInfo: String
     let utilization: Double
     var colorOverride: Color? = nil
+    var displayText: String? = nil
 
     private var barGradient: LinearGradient {
         if let color = colorOverride {
@@ -448,7 +450,7 @@ struct LargeUsageBarView: View {
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 1) {
-                    Text("\(Int(utilization))%")
+                    Text(displayText ?? "\(Int(utilization))%")
                         .font(.system(size: 16, weight: .black, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(accentColor)
