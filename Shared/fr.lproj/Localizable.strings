@@ -73,14 +73,21 @@
 
 /* Guide */
 "guide.title" = "Configuration";
-"guide.step1" = "Ouvrez **claude.ai** dans Chrome et connectez-vous";
-"guide.step2" = "Ouvrez les DevTools : **Cmd + Option + I**";
-"guide.step3" = "Onglet **Application** > **Cookies** > **claude.ai**";
-"guide.step4" = "Copiez le cookie **sessionKey**";
-"guide.step4.detail" = "Commence par sk-ant-sid01-...";
-"guide.step5" = "Copiez le cookie **lastActiveOrg**";
-"guide.step5.detail" = "C'est l'Organization ID";
-"guide.step6" = "Collez les deux valeurs et testez";
+"guide.oauth.title" = "Claude Code";
+"guide.oauth.badge" = "Recommandé";
+"guide.oauth.step1" = "Installez **Claude Code** (le CLI d'Anthropic)";
+"guide.oauth.step2" = "Ouvrez TokenEater et cliquez sur **Connecter**";
+"guide.oauth.step3" = "Terminé — le token se rafraîchit automatiquement";
+"guide.browser.title" = "Import navigateur";
+"guide.browser.step1" = "Connectez-vous sur **claude.ai** dans votre navigateur";
+"guide.browser.step2" = "Cliquez sur **Connecter** — les cookies sont détectés automatiquement";
+"guide.browser.step3" = "Compatible Chrome, Arc, Brave et Edge";
+"guide.manual.title" = "Cookies manuels";
+"guide.manual.step1" = "Ouvrez **claude.ai** > DevTools (**Cmd + Option + I**)";
+"guide.manual.step2" = "Allez dans **Application** > **Cookies** > **claude.ai**";
+"guide.manual.step3" = "Copiez **sessionKey** (`sk-ant-sid01-...`) et **lastActiveOrg**";
+"guide.manual.step4" = "Collez les deux valeurs dans les champs et cliquez sur **Tester**";
+"guide.cookie.warning" = "Les cookies navigateur expirent environ chaque mois. Si le widget affiche une erreur, ré-importez-les. Les tokens Claude Code se rafraîchissent automatiquement — aucune maintenance.";
 "guide.widget" = "Ajouter le widget";
 "guide.widget.detail" = "Clic droit sur le bureau > **Modifier les widgets** > **TokenEater**";
 

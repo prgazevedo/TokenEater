@@ -57,7 +57,7 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text("v1.1.0")
+                Text("v1.3.0")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
@@ -201,8 +201,6 @@ struct SettingsView: View {
                     )
                     .foregroundStyle(result.success ? .green : .red)
                 }
-            } footer: {
-                Text("settings.footer")
             }
         }
         .formStyle(.grouped)
@@ -227,6 +225,7 @@ struct SettingsView: View {
                 Text("settings.metrics.pinned")
             } footer: {
                 Text("settings.metrics.pinned.footer")
+                    .fixedSize(horizontal: false, vertical: true)
             }
             Section("settings.pacing.display") {
                 Picker("Mode", selection: $pacingDisplayMode) {
@@ -290,33 +289,84 @@ struct SettingsView: View {
         ZStack {
             sheetBg.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                HStack {
-                    Text("guide.title")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Button {
-                        showGuide = false
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 20))
-                            .foregroundStyle(.white.opacity(0.3))
+            ScrollView {
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("guide.title")
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                        Spacer()
+                        Button {
+                            showGuide = false
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 20))
+                                .foregroundStyle(.white.opacity(0.3))
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-                .padding(.bottom, 16)
+                    .padding(.bottom, 20)
 
-                VStack(spacing: 10) {
-                    guideStep(1, "globe", LocalizedStringKey("guide.step1"))
-                    guideStep(2, "terminal", LocalizedStringKey("guide.step2"))
-                    guideStep(3, "tray.full", LocalizedStringKey("guide.step3"))
-                    guideStep(4, "key.fill", LocalizedStringKey("guide.step4"), detail: String(localized: "guide.step4.detail"))
-                    guideStep(5, "building.2", LocalizedStringKey("guide.step5"), detail: String(localized: "guide.step5.detail"))
-                    guideStep(6, "checkmark.circle", LocalizedStringKey("guide.step6"))
+                    // Method 1: Claude Code
+                    guideSection(
+                        icon: "terminal.fill",
+                        color: Color(hex: "#22C55E"),
+                        title: String(localized: "guide.oauth.title"),
+                        badge: String(localized: "guide.oauth.badge"),
+                        steps: [
+                            String(localized: "guide.oauth.step1"),
+                            String(localized: "guide.oauth.step2"),
+                            String(localized: "guide.oauth.step3"),
+                        ]
+                    )
 
+                    // Method 2: Browser auto-import
+                    guideSection(
+                        icon: "globe",
+                        color: Color(hex: "#0A84FF"),
+                        title: String(localized: "guide.browser.title"),
+                        steps: [
+                            String(localized: "guide.browser.step1"),
+                            String(localized: "guide.browser.step2"),
+                            String(localized: "guide.browser.step3"),
+                        ]
+                    )
+
+                    // Method 3: Manual cookies
+                    guideSection(
+                        icon: "key.fill",
+                        color: accent,
+                        title: String(localized: "guide.manual.title"),
+                        steps: [
+                            String(localized: "guide.manual.step1"),
+                            String(localized: "guide.manual.step2"),
+                            String(localized: "guide.manual.step3"),
+                            String(localized: "guide.manual.step4"),
+                        ]
+                    )
+
+                    // Cookie expiration warning
+                    HStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 11))
+                            .foregroundStyle(accent)
+                        Text("guide.cookie.warning")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(accent.opacity(0.06))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(accent.opacity(0.1), lineWidth: 1)
+                            )
+                    )
+                    .padding(.bottom, 16)
+
+                    // Add widget
                     HStack(spacing: 12) {
                         Image(systemName: "square.grid.2x2")
                             .font(.system(size: 14))
@@ -345,60 +395,60 @@ struct SettingsView: View {
                             )
                     )
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 24)
-
-                Spacer(minLength: 0)
+                .padding(24)
             }
         }
-        .frame(width: 440, height: 540)
+        .frame(width: 460, height: 560)
     }
 
-    private func guideStep(_ number: Int, _ icon: String, _ text: LocalizedStringKey, detail: String? = nil) -> some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Text("\(number)")
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-            }
-            .frame(width: 28, height: 28)
-            .background(
-                Circle().fill(
-                    LinearGradient(
-                        colors: [accent, accentRed],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            )
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(text)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.85))
-                if let detail = detail {
-                    Text(detail)
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.3))
+    private func guideSection(icon: String, color: Color, title: String, badge: String? = nil, steps: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(color)
+                Text(title)
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.9))
+                if let badge = badge {
+                    Text(badge)
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(color)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(color.opacity(0.15))
+                        .clipShape(Capsule())
                 }
             }
 
-            Spacer()
-
-            Image(systemName: icon)
-                .font(.system(size: 13))
-                .foregroundStyle(.white.opacity(0.2))
+            VStack(spacing: 6) {
+                ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                    HStack(alignment: .top, spacing: 10) {
+                        Text("\(index + 1)")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundStyle(color.opacity(0.8))
+                            .frame(width: 18, height: 18)
+                            .background(color.opacity(0.1))
+                            .clipShape(Circle())
+                        Text(.init(step))
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.7))
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer()
+                    }
+                }
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(sheetCard)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                    )
+            )
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(sheetCard)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
-                )
-        )
+        .padding(.bottom, 16)
     }
 
     // MARK: - Browser Picker Sheet

@@ -73,14 +73,21 @@
 
 /* Guide */
 "guide.title" = "Setup Guide";
-"guide.step1" = "Open **claude.ai** in Chrome and log in";
-"guide.step2" = "Open DevTools: **Cmd + Option + I**";
-"guide.step3" = "Tab **Application** > **Cookies** > **claude.ai**";
-"guide.step4" = "Copy the **sessionKey** cookie";
-"guide.step4.detail" = "Starts with sk-ant-sid01-...";
-"guide.step5" = "Copy the **lastActiveOrg** cookie";
-"guide.step5.detail" = "This is the Organization ID";
-"guide.step6" = "Paste both values and test";
+"guide.oauth.title" = "Claude Code";
+"guide.oauth.badge" = "Recommended";
+"guide.oauth.step1" = "Install **Claude Code** (Anthropic's CLI)";
+"guide.oauth.step2" = "Open TokenEater and click **Connect**";
+"guide.oauth.step3" = "Done — token refreshes automatically";
+"guide.browser.title" = "Browser Auto-Import";
+"guide.browser.step1" = "Log in to **claude.ai** in your browser";
+"guide.browser.step2" = "Click **Connect** — cookies are detected automatically";
+"guide.browser.step3" = "Works with Chrome, Arc, Brave, and Edge";
+"guide.manual.title" = "Manual Cookies";
+"guide.manual.step1" = "Open **claude.ai** > DevTools (**Cmd + Option + I**)";
+"guide.manual.step2" = "Go to **Application** > **Cookies** > **claude.ai**";
+"guide.manual.step3" = "Copy **sessionKey** (`sk-ant-sid01-...`) and **lastActiveOrg**";
+"guide.manual.step4" = "Paste both values in the fields above and click **Test**";
+"guide.cookie.warning" = "Browser cookies expire roughly every month. If the widget shows an error, re-import them. Claude Code tokens refresh automatically — no maintenance needed.";
 "guide.widget" = "Add the widget";
 "guide.widget.detail" = "Right-click desktop > **Edit Widgets** > **TokenEater**";
 
