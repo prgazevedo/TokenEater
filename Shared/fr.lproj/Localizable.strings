@@ -69,6 +69,7 @@
 "error.http" = "Erreur HTTP %d";
 "error.network" = "Erreur reseau : %@";
 "error.invalidresponse.short" = "Reponse invalide";
+"error.unsupportedplan" = "Donnees d'utilisation indisponibles — un plan Claude Pro ou Team est requis";
 
 /* Errors - Import */
 "error.keychain.denied" = "Acces Keychain refuse pour %@. Relancez et autorisez l'acces.";

@@ -69,6 +69,7 @@
 "error.http" = "HTTP error %d";
 "error.network" = "Network error: %@";
 "error.invalidresponse.short" = "Invalid response";
+"error.unsupportedplan" = "Usage data not available — Claude Pro or Team plan required";
 
 /* Errors - Import */
 "error.keychain.denied" = "Keychain access denied for %@. Relaunch and authorize.";

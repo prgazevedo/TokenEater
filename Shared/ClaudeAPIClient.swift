@@ -40,11 +40,15 @@ final class ClaudeAPIClient {
 
         switch httpResponse.statusCode {
         case 200:
-            let usage = try JSONDecoder().decode(UsageResponse.self, from: data)
-            // Cache the data
-            let cached = CachedUsage(usage: usage, fetchDate: Date())
-            SharedStorage.writeCache(cached, fromHost: isHostApp)
-            return usage
+            do {
+                let usage = try JSONDecoder().decode(UsageResponse.self, from: data)
+                // Cache the data
+                let cached = CachedUsage(usage: usage, fetchDate: Date())
+                SharedStorage.writeCache(cached, fromHost: isHostApp)
+                return usage
+            } catch {
+                throw ClaudeAPIError.unsupportedPlan
+            }
         case 401, 403:
             throw ClaudeAPIError.sessionExpired
         default:
@@ -71,7 +75,9 @@ final class ClaudeAPIClient {
             }
 
             if httpResponse.statusCode == 200 {
-                let usage = try JSONDecoder().decode(UsageResponse.self, from: data)
+                guard let usage = try? JSONDecoder().decode(UsageResponse.self, from: data) else {
+                    return ConnectionTestResult(success: false, message: String(localized: "error.unsupportedplan"))
+                }
                 let sessionPct = usage.fiveHour?.utilization ?? 0
                 return ConnectionTestResult(success: true, message: String(format: String(localized: "test.success"), Int(sessionPct)))
             } else if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
@@ -99,6 +105,7 @@ enum ClaudeAPIError: LocalizedError {
     case invalidURL
     case invalidResponse
     case sessionExpired
+    case unsupportedPlan
     case httpError(Int)
 
     var errorDescription: String? {
@@ -113,6 +120,8 @@ enum ClaudeAPIError: LocalizedError {
             return String(localized: "error.invalidresponse")
         case .sessionExpired:
             return String(localized: "error.sessionexpired")
+        case .unsupportedPlan:
+            return String(localized: "error.unsupportedplan")
         case .httpError(let code):
             return String(format: String(localized: "error.http"), code)
         }
