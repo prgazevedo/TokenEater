@@ -6,3 +6,14 @@ DerivedData/
 xcuserdata/
 *.zip
 *.dmg
+*.app
+
+# Claude Code
+.claude/
+
+# Dependencies
+Pods/
+.swiftpm/
+
+# Environment
+.env*
