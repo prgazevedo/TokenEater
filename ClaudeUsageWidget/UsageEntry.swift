@@ -26,16 +26,12 @@ struct UsageEntry: TimelineEntry {
             usage: UsageResponse(
                 fiveHour: UsageBucket(utilization: 35, resetsAt: iso8601String(from: Date().addingTimeInterval(3600))),
                 sevenDay: UsageBucket(utilization: 52, resetsAt: iso8601String(from: Date().addingTimeInterval(86400 * 3))),
-                sevenDaySonnet: UsageBucket(utilization: 12, resetsAt: iso8601String(from: Date().addingTimeInterval(86400 * 3))),
-                sevenDayOauthApps: nil,
-                sevenDayOpus: nil,
-                sevenDayCowork: nil,
-                extraUsage: nil
+                sevenDaySonnet: UsageBucket(utilization: 12, resetsAt: iso8601String(from: Date().addingTimeInterval(86400 * 3)))
             )
         )
     }
 
     static var unconfigured: UsageEntry {
-        UsageEntry(date: Date(), usage: nil, error: "Ouvrez l'app pour configurer votre session Claude")
+        UsageEntry(date: Date(), usage: nil, error: String(localized: "error.nosessionkey"))
     }
 }

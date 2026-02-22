@@ -40,15 +40,11 @@ final class ClaudeAPIClient {
 
         switch httpResponse.statusCode {
         case 200:
-            do {
-                let usage = try JSONDecoder().decode(UsageResponse.self, from: data)
-                // Cache the data
-                let cached = CachedUsage(usage: usage, fetchDate: Date())
-                SharedStorage.writeCache(cached, fromHost: isHostApp)
-                return usage
-            } catch {
-                throw ClaudeAPIError.unsupportedPlan
-            }
+            let usage = try JSONDecoder().decode(UsageResponse.self, from: data)
+            // Cache the data
+            let cached = CachedUsage(usage: usage, fetchDate: Date())
+            SharedStorage.writeCache(cached, fromHost: isHostApp)
+            return usage
         case 401, 403:
             throw ClaudeAPIError.sessionExpired
         default:
