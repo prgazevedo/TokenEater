@@ -2,6 +2,8 @@ import SwiftUI
 import WidgetKit
 
 struct SettingsView: View {
+    var onConfigSaved: (() -> Void)?
+
     @State private var sessionKey: String = ""
     @State private var organizationID: String = ""
     @State private var testResult: ConnectionTestResult?
@@ -29,19 +31,16 @@ struct SettingsView: View {
             VStack(spacing: 0) {
                 headerSection
                     .padding(.top, 28)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 20)
 
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 16) {
-                        credentialsCard
-                        actionsRow
-                        if let result = testResult {
-                            resultBanner(result)
-                        }
+                VStack(spacing: 16) {
+                    credentialsCard
+                    actionsRow
+                    if let result = testResult {
+                        resultBanner(result)
                     }
-                    .padding(.horizontal, 28)
-                    .padding(.bottom, 12)
                 }
+                .padding(.horizontal, 28)
 
                 Spacer(minLength: 0)
 
@@ -73,7 +72,7 @@ struct SettingsView: View {
                 .font(.system(size: 22, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
 
-            Text("Monitor your Claude usage")
+            Text("settings.subtitle")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(subtle)
         }
@@ -94,7 +93,7 @@ struct SettingsView: View {
             // Session Key
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("Session Key")
+                    Text("settings.sessionkey")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.6))
                         .tracking(0.5)
@@ -140,14 +139,14 @@ struct SettingsView: View {
             // Org ID
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 4) {
-                    Text("Organization ID")
+                    Text("settings.orgid")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.6))
                         .tracking(0.5)
                         .textCase(.uppercase)
                     Text("·")
                         .foregroundStyle(.white.opacity(0.2))
-                    Text("cookie lastActiveOrg")
+                    Text("settings.orgid.hint")
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.25))
                 }
@@ -198,7 +197,7 @@ struct SettingsView: View {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 11))
                     }
-                    Text("Tester")
+                    Text("settings.test")
                         .font(.system(size: 12, weight: .semibold))
                 }
                 .frame(maxWidth: .infinity)
@@ -227,7 +226,7 @@ struct SettingsView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "arrow.clockwise")
                         .font(.system(size: 11))
-                    Text("Rafraichir")
+                    Text("settings.refresh")
                         .font(.system(size: 12, weight: .semibold))
                 }
                 .frame(maxWidth: .infinity)
@@ -252,7 +251,7 @@ struct SettingsView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "questionmark.circle")
                         .font(.system(size: 11))
-                    Text("Guide")
+                    Text("settings.guide")
                         .font(.system(size: 12, weight: .semibold))
                 }
                 .frame(maxWidth: .infinity)
@@ -300,15 +299,31 @@ struct SettingsView: View {
 
     // MARK: - Footer
 
+    @AppStorage("showMenuBar") private var showMenuBar = true
+
     private var footerSection: some View {
-        HStack {
-            Text("Les cookies expirent chaque mois")
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.2))
-            Spacer()
-            Text("v1.0.0")
-                .font(.system(size: 10, design: .monospaced))
-                .foregroundStyle(.white.opacity(0.15))
+        VStack(spacing: 12) {
+            Divider()
+                .overlay(Color.white.opacity(0.06))
+
+            Toggle(isOn: $showMenuBar) {
+                Text("settings.menubar.toggle")
+                    .font(.system(size: 11))
+            }
+            .toggleStyle(.switch)
+            .controlSize(.small)
+            .foregroundStyle(.white.opacity(0.5))
+            .padding(.vertical, 4)
+
+            HStack {
+                Text("settings.footer")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.white.opacity(0.2))
+                Spacer()
+                Text("v1.1.0")
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.15))
+            }
         }
     }
 
@@ -321,7 +336,7 @@ struct SettingsView: View {
             VStack(spacing: 0) {
                 // Sheet header
                 HStack {
-                    Text("Configuration")
+                    Text("guide.title")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                     Spacer()
@@ -338,50 +353,50 @@ struct SettingsView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 16)
 
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 12) {
-                        guideStep(1, "globe", "Ouvrez **claude.ai** dans Chrome et connectez-vous")
-                        guideStep(2, "terminal", "Ouvrez les DevTools : **Cmd + Option + I**")
-                        guideStep(3, "tray.full", "Onglet **Application** > **Cookies** > **claude.ai**")
-                        guideStep(4, "key.fill", "Copiez le cookie **sessionKey**", detail: "sk-ant-sid01-...")
-                        guideStep(5, "building.2", "Copiez le cookie **lastActiveOrg**", detail: "C'est l'Organization ID")
-                        guideStep(6, "checkmark.circle", "Collez les deux valeurs et testez")
+                VStack(spacing: 10) {
+                    guideStep(1, "globe", LocalizedStringKey("guide.step1"))
+                    guideStep(2, "terminal", LocalizedStringKey("guide.step2"))
+                    guideStep(3, "tray.full", LocalizedStringKey("guide.step3"))
+                    guideStep(4, "key.fill", LocalizedStringKey("guide.step4"), detail: String(localized: "guide.step4.detail"))
+                    guideStep(5, "building.2", LocalizedStringKey("guide.step5"), detail: String(localized: "guide.step5.detail"))
+                    guideStep(6, "checkmark.circle", LocalizedStringKey("guide.step6"))
 
-                        // Widget add instruction
-                        HStack(spacing: 12) {
-                            Image(systemName: "square.grid.2x2")
-                                .font(.system(size: 14))
-                                .foregroundStyle(accent)
-                                .frame(width: 32, height: 32)
-                                .background(accent.opacity(0.12))
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                    // Widget add instruction
+                    HStack(spacing: 12) {
+                        Image(systemName: "square.grid.2x2")
+                            .font(.system(size: 14))
+                            .foregroundStyle(accent)
+                            .frame(width: 32, height: 32)
+                            .background(accent.opacity(0.12))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
 
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Ajouter le widget")
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundStyle(.white.opacity(0.9))
-                                Text("Clic droit sur le bureau > **Modifier les widgets** > **TokenEater**")
-                                    .font(.system(size: 11))
-                                    .foregroundStyle(.white.opacity(0.45))
-                            }
-                            Spacer()
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("guide.widget")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.9))
+                            Text("guide.widget.detail")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white.opacity(0.45))
                         }
-                        .padding(14)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(accent.opacity(0.06))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(accent.opacity(0.15), lineWidth: 1)
-                                )
-                        )
+                        Spacer()
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 24)
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(accent.opacity(0.06))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(accent.opacity(0.15), lineWidth: 1)
+                                )
+                    )
                 }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
+
+                Spacer(minLength: 0)
             }
         }
-        .frame(width: 440, height: 480)
+        .frame(width: 440, height: 540)
     }
 
     private func guideStep(_ number: Int, _ icon: String, _ text: LocalizedStringKey, detail: String? = nil) -> some View {
@@ -420,7 +435,7 @@ struct SettingsView: View {
                 .foregroundStyle(.white.opacity(0.2))
         }
         .padding(.horizontal, 14)
-        .padding(.vertical, 12)
+        .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(cardBg)
@@ -448,9 +463,9 @@ struct SettingsView: View {
                             .font(.system(size: 13))
                     }
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("Importer depuis le navigateur")
+                        Text("import.button")
                             .font(.system(size: 12, weight: .semibold))
-                        Text("Detecte automatiquement vos cookies Claude")
+                        Text("import.subtitle")
                             .font(.system(size: 10))
                             .foregroundStyle(.white.opacity(0.4))
                     }
@@ -505,7 +520,7 @@ struct SettingsView: View {
             if browsers.isEmpty {
                 DispatchQueue.main.async {
                     isImporting = false
-                    importMessage = "Aucun navigateur Chromium detecte"
+                    importMessage = String(localized: "import.nobroser")
                     importSuccess = false
                 }
                 return
@@ -540,7 +555,7 @@ struct SettingsView: View {
                     sessionKey = cookies.sessionKey
                     organizationID = cookies.organizationID
                     saveConfig()
-                    importMessage = "Importe depuis \(cookies.browser)"
+                    importMessage = String(format: String(localized: "import.success"), cookies.browser)
                     importSuccess = true
                     showBrowserPicker = false
                 case .failure(let error):
@@ -559,7 +574,7 @@ struct SettingsView: View {
 
             VStack(spacing: 16) {
                 HStack {
-                    Text("Choisir un navigateur")
+                    Text("import.picker.title")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                     Spacer()
@@ -589,7 +604,7 @@ struct SettingsView: View {
                                 Text(browser.name)
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(.white.opacity(0.9))
-                                Text("\(browser.cookiePaths.count) profil(s)")
+                                Text(String(format: String(localized: "import.profiles"), browser.cookiePaths.count))
                                     .font(.system(size: 11))
                                     .foregroundStyle(.white.opacity(0.35))
                             }
@@ -618,7 +633,7 @@ struct SettingsView: View {
                         ProgressView()
                             .controlSize(.small)
                             .tint(accent)
-                        Text("Import en cours...")
+                        Text("import.loading")
                             .font(.system(size: 12))
                             .foregroundStyle(.white.opacity(0.5))
                     }
@@ -665,6 +680,7 @@ struct SettingsView: View {
     private func saveConfig() {
         let config = SharedConfig(sessionKey: sessionKey, organizationID: organizationID)
         SharedStorage.writeConfig(config, fromHost: true)
+        onConfigSaved?()
     }
 
     // MARK: - Actions

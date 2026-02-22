@@ -35,21 +35,21 @@ enum BrowserCookieReader {
         var errorDescription: String? {
             switch self {
             case .keychainDenied(let svc):
-                return "Acces Keychain refuse pour \(svc). Relancez et autorisez l'acces."
+                return String(format: String(localized: "error.keychain.denied"), svc)
             case .keychainNotFound(let svc):
-                return "Cle \(svc) introuvable dans le Keychain"
+                return String(format: String(localized: "error.keychain.notfound"), svc)
             case .dbCopyFailed(let path):
-                return "Impossible de copier la base cookies: \(path)"
+                return String(format: String(localized: "error.db.copy"), path)
             case .dbOpenFailed(let path):
-                return "Impossible d'ouvrir la base SQLite: \(path)"
+                return String(format: String(localized: "error.db.open"), path)
             case .noCookiesInDB:
-                return "Aucun cookie Claude trouve dans la base"
+                return String(localized: "error.nocookies")
             case .decryptionFailed(let found):
-                return "Dechiffrement echoue (\(found) cookie(s) trouves mais non dechiffrables)"
+                return String(format: String(localized: "error.decryption"), found)
             case .missingCookie(let hasSession, let hasOrg):
-                let missing = !hasSession && !hasOrg ? "sessionKey et lastActiveOrg"
-                    : !hasSession ? "sessionKey" : "lastActiveOrg"
-                return "Cookie manquant: \(missing)"
+                let missing = !hasSession && !hasOrg ? String(localized: "error.missing.both")
+                    : !hasSession ? String(localized: "error.missing.session") : String(localized: "error.missing.org")
+                return String(format: String(localized: "error.missing.cookie"), missing)
             }
         }
     }

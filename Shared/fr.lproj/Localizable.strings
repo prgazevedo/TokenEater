@@ -1,0 +1,88 @@
+/* Menu Bar */
+"menubar.refresh" = "Rafraichir";
+"menubar.settings" = "Reglages";
+"menubar.quit" = "Quitter";
+"menubar.hide" = "Masquer de la barre";
+"menubar.show" = "Afficher dans la barre";
+"menubar.updated" = "Mis a jour %@";
+
+/* Metrics */
+"metric.session" = "Session 5h";
+"metric.weekly" = "Hebdo";
+"metric.sonnet" = "Sonnet";
+"metric.reset" = "reset %@";
+
+/* Widget */
+"widget.session" = "Session";
+"widget.weekly" = "Hebdo";
+"widget.sonnet" = "Sonnet";
+"widget.session.subtitle" = "Fenetre glissante 5h";
+"widget.weekly.full" = "Hebdomadaire";
+"widget.weekly.subtitle" = "Opus + Sonnet + Haiku";
+"widget.sonnet.subtitle" = "Limite dediee";
+"widget.offline" = "Hors ligne";
+"widget.loading" = "Chargement...";
+"widget.reset" = "Reset %@";
+"widget.soon" = "Bientot";
+"widget.updated" = "Maj %@";
+
+/* Settings */
+"settings.subtitle" = "Surveillez votre consommation Claude";
+"settings.sessionkey" = "Session Key";
+"settings.orgid" = "Organization ID";
+"settings.orgid.hint" = "cookie lastActiveOrg";
+"settings.test" = "Tester";
+"settings.refresh" = "Rafraichir";
+"settings.guide" = "Guide";
+"settings.testing" = "Test en cours...";
+"settings.footer" = "Les cookies expirent chaque mois. Mettez-les a jour si le widget affiche une erreur.";
+"settings.menubar.toggle" = "Afficher dans la barre de menu";
+
+/* Import */
+"import.button" = "Importer depuis le navigateur";
+"import.subtitle" = "Detecte automatiquement vos cookies Claude";
+"import.success" = "Importe depuis %@";
+"import.loading" = "Import en cours...";
+"import.nobroser" = "Aucun navigateur Chromium detecte";
+"import.picker.title" = "Choisir un navigateur";
+"import.profiles" = "%d profil(s)";
+
+/* Guide */
+"guide.title" = "Configuration";
+"guide.step1" = "Ouvrez **claude.ai** dans Chrome et connectez-vous";
+"guide.step2" = "Ouvrez les DevTools : **Cmd + Option + I**";
+"guide.step3" = "Onglet **Application** > **Cookies** > **claude.ai**";
+"guide.step4" = "Copiez le cookie **sessionKey**";
+"guide.step4.detail" = "Commence par sk-ant-sid01-...";
+"guide.step5" = "Copiez le cookie **lastActiveOrg**";
+"guide.step5.detail" = "C'est l'Organization ID";
+"guide.step6" = "Collez les deux valeurs et testez";
+"guide.widget" = "Ajouter le widget";
+"guide.widget.detail" = "Clic droit sur le bureau > **Modifier les widgets** > **TokenEater**";
+
+/* Errors - API */
+"error.nosessionkey" = "Pas de cle de session configuree. Ouvrez l'app pour la configurer.";
+"error.noorgid" = "Organization ID non configure. Entrez-le dans l'app.";
+"error.invalidurl" = "URL invalide";
+"error.invalidresponse" = "Reponse invalide du serveur";
+"error.sessionexpired" = "Session expiree — reconnectez-vous sur claude.ai et mettez a jour le cookie";
+"error.http" = "Erreur HTTP %d";
+"error.network" = "Erreur reseau : %@";
+"error.invalidresponse.short" = "Reponse invalide";
+
+/* Errors - Import */
+"error.keychain.denied" = "Acces Keychain refuse pour %@. Relancez et autorisez l'acces.";
+"error.keychain.notfound" = "Cle %@ introuvable dans le Keychain";
+"error.db.copy" = "Impossible de copier la base cookies : %@";
+"error.db.open" = "Impossible d'ouvrir la base SQLite : %@";
+"error.nocookies" = "Aucun cookie Claude trouve dans la base";
+"error.decryption" = "Dechiffrement echoue (%d cookie(s) trouves mais non dechiffrables)";
+"error.missing.both" = "sessionKey et lastActiveOrg";
+"error.missing.session" = "sessionKey";
+"error.missing.org" = "lastActiveOrg";
+"error.missing.cookie" = "Cookie manquant : %@";
+
+/* Connection Test */
+"test.success" = "Connexion OK — Session : %d%%";
+"test.expired" = "Session expiree ou invalide (HTTP %d)";
+"test.http" = "Erreur HTTP %d";

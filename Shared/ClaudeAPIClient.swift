@@ -56,7 +56,7 @@ final class ClaudeAPIClient {
 
     func testConnection(sessionKey: String, orgID: String) async -> ConnectionTestResult {
         guard let url = URL(string: "\(baseURL)/api/organizations/\(orgID)/usage") else {
-            return ConnectionTestResult(success: false, message: "URL invalide")
+            return ConnectionTestResult(success: false, message: String(localized: "error.invalidurl"))
         }
 
         var request = URLRequest(url: url)
@@ -67,20 +67,20 @@ final class ClaudeAPIClient {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else {
-                return ConnectionTestResult(success: false, message: "Reponse invalide")
+                return ConnectionTestResult(success: false, message: String(localized: "error.invalidresponse.short"))
             }
 
             if httpResponse.statusCode == 200 {
                 let usage = try JSONDecoder().decode(UsageResponse.self, from: data)
                 let sessionPct = usage.fiveHour?.utilization ?? 0
-                return ConnectionTestResult(success: true, message: "Connexion OK — Session: \(Int(sessionPct))%")
+                return ConnectionTestResult(success: true, message: String(format: String(localized: "test.success"), Int(sessionPct)))
             } else if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
-                return ConnectionTestResult(success: false, message: "Session expiree ou invalide (HTTP \(httpResponse.statusCode))")
+                return ConnectionTestResult(success: false, message: String(format: String(localized: "test.expired"), httpResponse.statusCode))
             } else {
-                return ConnectionTestResult(success: false, message: "Erreur HTTP \(httpResponse.statusCode)")
+                return ConnectionTestResult(success: false, message: String(format: String(localized: "test.http"), httpResponse.statusCode))
             }
         } catch {
-            return ConnectionTestResult(success: false, message: "Erreur reseau: \(error.localizedDescription)")
+            return ConnectionTestResult(success: false, message: String(format: String(localized: "error.network"), error.localizedDescription))
         }
     }
 
@@ -104,17 +104,17 @@ enum ClaudeAPIError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noSessionKey:
-            return "Pas de cle de session configuree. Ouvrez l'app pour la configurer."
+            return String(localized: "error.nosessionkey")
         case .noOrganizationID:
-            return "Organization ID non configure. Entrez-le dans l'app."
+            return String(localized: "error.noorgid")
         case .invalidURL:
-            return "URL invalide"
+            return String(localized: "error.invalidurl")
         case .invalidResponse:
-            return "Reponse invalide du serveur"
+            return String(localized: "error.invalidresponse")
         case .sessionExpired:
-            return "Session expiree — reconnectez-vous sur claude.ai et mettez a jour le cookie"
+            return String(localized: "error.sessionexpired")
         case .httpError(let code):
-            return "Erreur HTTP \(code)"
+            return String(format: String(localized: "error.http"), code)
         }
     }
 }

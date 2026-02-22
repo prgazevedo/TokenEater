@@ -55,21 +55,21 @@ struct UsageWidgetView: View {
             HStack(spacing: 0) {
                 if let fiveHour = usage.fiveHour {
                     CircularUsageView(
-                        label: "Session",
+                        label: String(localized: "widget.session"),
                         resetInfo: formatResetTime(fiveHour.resetsAtDate),
                         utilization: fiveHour.utilization
                     )
                 }
                 if let sevenDay = usage.sevenDay {
                     CircularUsageView(
-                        label: "Hebdo",
+                        label: String(localized: "widget.weekly"),
                         resetInfo: formatResetDate(sevenDay.resetsAtDate),
                         utilization: sevenDay.utilization
                     )
                 }
                 if let sonnet = usage.sevenDaySonnet {
                     CircularUsageView(
-                        label: "Sonnet",
+                        label: String(localized: "widget.sonnet"),
                         resetInfo: formatResetDate(sonnet.resetsAtDate),
                         utilization: sonnet.utilization
                     )
@@ -79,7 +79,7 @@ struct UsageWidgetView: View {
             Spacer(minLength: 6)
 
             // Footer
-            Text("Maj \(entry.date.relativeFormatted)")
+            Text(String(format: String(localized: "widget.updated"), entry.date.relativeFormatted))
                 .font(.system(size: 8, design: .rounded))
                 .foregroundStyle(.white.opacity(0.3))
         }
@@ -104,7 +104,7 @@ struct UsageWidgetView: View {
                     HStack(spacing: 3) {
                         Image(systemName: "wifi.slash")
                             .font(.system(size: 9))
-                        Text("Hors ligne")
+                        Text("widget.offline")
                             .font(.system(size: 9, design: .rounded))
                     }
                     .foregroundStyle(.white.opacity(0.4))
@@ -116,8 +116,8 @@ struct UsageWidgetView: View {
             if let fiveHour = usage.fiveHour {
                 LargeUsageBarView(
                     icon: "timer",
-                    label: "Session",
-                    subtitle: "Fenetre glissante 5h",
+                    label: String(localized: "widget.session"),
+                    subtitle: String(localized: "widget.session.subtitle"),
                     resetInfo: formatResetTime(fiveHour.resetsAtDate),
                     utilization: fiveHour.utilization
                 )
@@ -129,8 +129,8 @@ struct UsageWidgetView: View {
             if let sevenDay = usage.sevenDay {
                 LargeUsageBarView(
                     icon: "chart.bar.fill",
-                    label: "Hebdomadaire",
-                    subtitle: "Opus + Sonnet + Haiku",
+                    label: String(localized: "widget.weekly.full"),
+                    subtitle: String(localized: "widget.weekly.subtitle"),
                     resetInfo: formatResetDate(sevenDay.resetsAtDate),
                     utilization: sevenDay.utilization
                 )
@@ -142,8 +142,8 @@ struct UsageWidgetView: View {
             if let sonnet = usage.sevenDaySonnet {
                 LargeUsageBarView(
                     icon: "wand.and.stars",
-                    label: "Sonnet",
-                    subtitle: "Limite dediee",
+                    label: String(localized: "widget.sonnet"),
+                    subtitle: String(localized: "widget.sonnet.subtitle"),
                     resetInfo: formatResetDate(sonnet.resetsAtDate),
                     utilization: sonnet.utilization
                 )
@@ -158,7 +158,7 @@ struct UsageWidgetView: View {
                 .padding(.bottom, 8)
 
             HStack {
-                Text("Maj \(entry.date.relativeFormatted)")
+                Text(String(format: String(localized: "widget.updated"), entry.date.relativeFormatted))
                     .font(.system(size: 9, design: .rounded))
                     .foregroundStyle(.white.opacity(0.3))
                 Spacer()
@@ -202,7 +202,7 @@ struct UsageWidgetView: View {
         VStack(spacing: 8) {
             ProgressView()
                 .tint(.orange)
-            Text("Chargement...")
+            Text("widget.loading")
                 .font(.system(size: 12, design: .rounded))
                 .foregroundStyle(.white.opacity(0.4))
         }
@@ -213,7 +213,7 @@ struct UsageWidgetView: View {
     private func formatResetTime(_ date: Date?) -> String {
         guard let date = date else { return "" }
         let interval = date.timeIntervalSinceNow
-        guard interval > 0 else { return "Bientot" }
+        guard interval > 0 else { return String(localized: "widget.soon") }
 
         let hours = Int(interval) / 3600
         let minutes = (Int(interval) % 3600) / 60
@@ -355,7 +355,7 @@ struct LargeUsageBarView: View {
                         .font(.system(size: 16, weight: .black, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(accentColor)
-                    Text("Reset \(resetInfo)")
+                    Text(String(format: String(localized: "widget.reset"), resetInfo))
                         .font(.system(size: 8, weight: .medium))
                         .foregroundStyle(.white.opacity(0.3))
                 }

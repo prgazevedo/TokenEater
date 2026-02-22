@@ -5,6 +5,7 @@ options:
     macOS: "14.0"
   xcodeVersion: "15.0"
   groupSortPosition: top
+  defaultLocalization: en
 
 settings:
   base:
